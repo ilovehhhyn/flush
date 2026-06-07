@@ -1,6 +1,6 @@
 # flush
 
-A Claude Code hook that scores every code response for smell and plays a pixelated toilet flush animation in your terminal when the code is bad enough — then optionally auto-prompts Claude to rewrite it.
+A Claude Code hook that scores every code response for "smelliness" and plays a pixelated toilet flush animation in your terminal when the code is bad enough then optionally auto-prompts Claude to rewrite it.
 
 ```
  flush
@@ -33,6 +33,36 @@ After every Claude turn, a `Stop` hook intercepts the response, extracts all fen
 The hook always exits cleanly — it never crashes Claude Code.
 
 **[Watch the demo](https://youtu.be/G3HWnpxAXGw)**
+
+---
+
+## rules
+
+| id | label | severity | weight | languages |
+|---|---|---|---|---|
+| `hardcoded_credentials` | hardcoded password / secret / token | error | 50 | all |
+| `bare_except` | bare `except:` or empty catch | error | 35 | all |
+| `todo_comment` | TODO / FIXME / HACK comment | error | 30 | all |
+| `mutable_default_arg` | mutable default argument (`=[]`, `={}`) | error | 25 | python |
+| `too_many_params` | function with >5 parameters | error | 25 | all |
+| `nested_loops` | nested `for` loops (O(n²) smell) | warn | 20 | all |
+| `no_error_handling` | file/network op without try/except | warn | 20 | python |
+| `global_variable` | `global` statement | warn | 15 | all |
+| `magic_numbers` | unexplained numeric literals | warn | 15 | all |
+| `no_type_hints` | Python function missing type hints | warn | 15 | python |
+| `star_import` | `from x import *` | warn | 15 | python |
+| `single_char_vars` | single-character variable names | warn | 10 | all |
+| `debug_output` | `print()` or `console.log()` | warn | 10 | all |
+| `no_docstring` | Python function without docstring | warn | 10 | python |
+| `long_lines` | lines over 100 characters | warn | 10 | all |
+
+**Notable thresholds:** a single hardcoded credential (50 pts) always flushes. A bare except + TODO comment (65 pts) always flushes. The default threshold is 40.
+
+### adding a rule
+
+1. Add an entry to `RULES` in `scorer/rules.py` — see existing rules for the schema
+2. Add a test in `tests/test_scorer.py`
+3. Run `./install.sh` to deploy
 
 ---
 
@@ -207,36 +237,6 @@ Claude rewrites the code
 ```
 
 In auto mode the terminal UI is optional — it will still animate if running, but you don't need it.
-
----
-
-## rules
-
-| id | label | severity | weight | languages |
-|---|---|---|---|---|
-| `hardcoded_credentials` | hardcoded password / secret / token | error | 50 | all |
-| `bare_except` | bare `except:` or empty catch | error | 35 | all |
-| `todo_comment` | TODO / FIXME / HACK comment | error | 30 | all |
-| `mutable_default_arg` | mutable default argument (`=[]`, `={}`) | error | 25 | python |
-| `too_many_params` | function with >5 parameters | error | 25 | all |
-| `nested_loops` | nested `for` loops (O(n²) smell) | warn | 20 | all |
-| `no_error_handling` | file/network op without try/except | warn | 20 | python |
-| `global_variable` | `global` statement | warn | 15 | all |
-| `magic_numbers` | unexplained numeric literals | warn | 15 | all |
-| `no_type_hints` | Python function missing type hints | warn | 15 | python |
-| `star_import` | `from x import *` | warn | 15 | python |
-| `single_char_vars` | single-character variable names | warn | 10 | all |
-| `debug_output` | `print()` or `console.log()` | warn | 10 | all |
-| `no_docstring` | Python function without docstring | warn | 10 | python |
-| `long_lines` | lines over 100 characters | warn | 10 | all |
-
-**Notable thresholds:** a single hardcoded credential (50 pts) always flushes. A bare except + TODO comment (65 pts) always flushes. The default threshold is 40.
-
-### adding a rule
-
-1. Add an entry to `RULES` in `scorer/rules.py` — see existing rules for the schema
-2. Add a test in `tests/test_scorer.py`
-3. Run `./install.sh` to deploy
 
 ---
 
