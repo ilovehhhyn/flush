@@ -32,6 +32,8 @@ After every Claude turn, a `Stop` hook intercepts the response, extracts all fen
 
 The hook always exits cleanly — it never crashes Claude Code.
 
+**[Watch the demo](https://youtu.be/G3HWnpxAXGw)**
+
 ---
 
 ## requirements
