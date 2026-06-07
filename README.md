@@ -1,4 +1,4 @@
-# flush
+# flush: your terminal toilet pet
 
 A Claude Code hook that scores every code response according to predetermined rules and plays a pixelated toilet flush animation in your terminal when the code is bad enough then optionally auto-prompts Claude to rewrite it.
 
