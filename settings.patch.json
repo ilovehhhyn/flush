@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/flush_post_response.py"
+          }
+        ]
+      }
+    ]
+  }
+}

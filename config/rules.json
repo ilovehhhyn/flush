@@ -1,0 +1,6 @@
+{
+  "threshold": 40,
+  "mode": "manual",
+  "disabled_rules": [],
+  "redo_prompt_template": "🚽 flush triggered — smell score {score} (threshold: {threshold}).\n\nViolations: {hits}.\n\nPlease rewrite the code fixing all of these."
+}
